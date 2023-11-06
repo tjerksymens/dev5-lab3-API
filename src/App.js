@@ -23,9 +23,10 @@ export default class App{
         fetch(`https://api.weatherbit.io/v2.0/current?lat=${x}&lon=${y}&key=0ed3744e6c9b4f6abe8216b6abe3fe96`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 let weather = data.data[0];
                 console.log(weather);
+                //set h2 innerhtml to city name
+                document.querySelector('h2').innerHTML = "It's currently " + weather.app_temp + "°C with " + weather.weather.description + " in " + weather.city_name;
             })
             .catch(error => console.log(error));
     }
