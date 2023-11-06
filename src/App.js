@@ -14,7 +14,15 @@ export default class App{
         console.log(position);
         let x = position.coords.latitude;
         let y = position.coords.longitude;
-        this.getWeather(x, y);
+        let cachedWeatherData = this.getCachedWeatherData();
+
+        if(cachedWeatherData && this.isCacheValid(cachedWeatherData.timestamp)){
+            this.displayWeather(cachedWeatherData.weather);
+            console.log("Cached weather data used");
+        } else {
+            this.getWeather(x, y)
+            console.log("New weather data fetched");
+        }
     }
 
     getWeather(x, y){
@@ -24,11 +32,34 @@ export default class App{
             .then(response => response.json())
             .then(data => {
                 let weather = data.data[0];
-                console.log(weather);
-                //set h2 innerhtml to city name
-                document.querySelector('h2').innerHTML = "It's currently " + weather.app_temp + "°C with " + weather.weather.description + " in " + weather.city_name;
+                this.saveWeatherDataToCache(weather);
+                this.displayWeather(weather);
             })
             .catch(error => console.log(error));
+    }
+
+    saveWeatherDataToCache(weather){
+        const timestamp = Date.now();
+        const weatherData = {
+            timestamp: timestamp,
+            weather: weather
+        };
+        localStorage.setItem('weatherData', JSON.stringify(weatherData));
+    }
+
+    getCachedWeatherData(){
+        const cachedData = localStorage.getItem('weatherData');
+        return cachedData ? JSON.parse(cachedData) : null;
+    }
+
+    isCacheValid(timestamp){
+        const currentTime = Date.now();
+        const cachedDuration = 60 * 60 * 1000; // 1 hour
+        return (currentTime - timestamp < cachedDuration);
+    }
+
+    displayWeather(weather){
+        document.querySelector("h2").innerHTML =  "It's currently " + weather.app_temp + "°C with " + weather.weather.description + " in " + weather.city_name;
     }
 
     errorPosition(error){
