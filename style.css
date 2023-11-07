@@ -29,6 +29,8 @@ body {
   place-items: center;
   height: 250px;
   width: 300px;
+  background-image: url("https://external-preview.redd.it/i-made-a-dark-version-of-the-cs2-wallpaper-enjoy-v0-LZOF0NGIGU33tvLUTIaIVTtC9-VGC945N4k8dtlAzxk.jpg?auto=webp&s=549f19202304695529530ce43cb2c6963f6e5bfc");
+  background-size: cover;
 }
 
 h1 {
