@@ -29,7 +29,6 @@ body {
   place-items: center;
   height: 250px;
   width: 300px;
-  background-color: pink;
 }
 
 h1 {
@@ -82,6 +81,11 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+img {
+  max-height: 80px;
+  max-width: auto;
 }
 
 @media (prefers-color-scheme: light) {

@@ -19,6 +19,7 @@ export default class App{
         if(cachedWeatherData && this.isCacheValid(cachedWeatherData.timestamp)){
             this.displayWeather(cachedWeatherData.weather);
             console.log("Cached weather data used");
+            this.getCSSkins(cachedWeatherData.weather.app_temp);
         } else {
             this.getWeather(x, y)
             console.log("New weather data fetched");
@@ -34,6 +35,19 @@ export default class App{
                 let weather = data.data[0];
                 this.saveWeatherDataToCache(weather);
                 this.displayWeather(weather);
+                this.getCSSkins(weather.app_temp);
+            })
+            .catch(error => console.log(error));
+    }
+
+    getCSSkins(temp){
+        console.log("getSkins");
+        fetch(`https://bymykel.github.io/CSGO-API/api/en/skins.json`)
+            .then(response => response.json())
+            .then(data => {
+                let skins = data;
+                this.displayCSSkins(skins, temp);
+                console.log(skins);
             })
             .catch(error => console.log(error));
     }
@@ -60,6 +74,19 @@ export default class App{
 
     displayWeather(weather){
         document.querySelector("h2").innerHTML =  "It's currently " + weather.app_temp + "°C with " + weather.weather.description + " in " + weather.city_name;
+    }
+
+    displayCSSkins(skins, temp){
+        if(temp > 30){
+            document.querySelector("span").innerHTML = skins[1007].name;
+            document.querySelector('img').src = skins[1007].image;
+        } else if(temp < 30 && temp > 0){
+            document.querySelector("span").innerHTML = skins[246].name;
+            document.querySelector('img').src = skins[246].image;
+        } else if(temp < 0){
+            document.querySelector("span").innerHTML = skins[1707].name;
+            document.querySelector('img').src = skins[1707].image;
+        }
     }
 
     errorPosition(error){
